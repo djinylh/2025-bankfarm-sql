@@ -16,14 +16,11 @@ VALUE ('RE002','대출기간 13~16개월',0.3,'중기 대출');
 INSERT INTO rate_rule (rt_tp,rt_rule,rt_pct,rt_des)
 VALUE ('RE002','대출기간 37개월 이상',0.3,'장기 대출');
 
-
 INSERT INTO rate_rule (rt_tp,rt_rule,rt_pct,rt_des)
 VALUE ('RE002','CREDIT',0.5,'신용 대출');
 
-
 INSERT INTO rate_rule (rt_tp,rt_rule,rt_pct,rt_des)
 VALUE ('RE002','BUSINESS',0.7,'사업자 대출');
-
 
 INSERT INTO rate_rule (rt_tp,rt_rule,rt_pct,rt_des)
 VALUE ('RE002','RENT',0.2,'전세자금 대출');
