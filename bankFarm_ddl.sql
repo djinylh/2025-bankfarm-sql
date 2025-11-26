@@ -1,6 +1,4 @@
 --                                                           생성 테이블
-
-
 CREATE TABLE cust_customer (
 	cust_id	BIGINT	PRIMARY KEY	 AUTO_INCREMENT 	COMMENT '고객 ID'
 	,cust_nm	VARCHAR(11)	NOT NULL 	COMMENT '고객 이름'
@@ -25,7 +23,6 @@ CREATE TABLE business_corporation (
 	FOREIGN KEY (cust_id) REFERENCES customer(cust_id)
 );
 
-
 CREATE TABLE `account`(
 	acct_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '계좌 ID'
 	,cust_id BIGINT NOT NULL COMMENT '고객 ID'
@@ -40,7 +37,6 @@ CREATE TABLE `account`(
 	,acct_crt_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '거래 일시'
 );
 
-
 CREATE TABLE acct_internal (
 	acct_id BIGINT NOT NULL COMMENT '계좌 ID'
 	,acct_int_nm VARCHAR(20) NOT NULL COMMENT '내부 계좌 이름'
@@ -49,8 +45,6 @@ CREATE TABLE acct_internal (
     ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 일시'
 	CONSTRAINT fk_acctInternal_acctount
 )
-
-
 
 CREATE TABLE employees (
 	emp_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '직원 ID'
@@ -69,7 +63,6 @@ CREATE TABLE employees (
 	FOREIGN KEY (bran_id) REFERENCES branch(bran_id)
 );
 
-
 CREATE TABLE prod_document (
 	bran_id BIGINT NOT NULL COMMENT '지점 ID'
 	,doc_prod_tp VARCHAR(5) NOT NULL COMMENT '상품 타입'
@@ -79,10 +72,6 @@ CREATE TABLE prod_document (
 	,CONSTRAINT fk_prodDocument_branch
 	FOREIGN KEY (bran_id) REFERENCES branch(bran_id)
 );
-
-
-
-
 
 CREATE TABLE `transaction` (
 	trns_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '입출금 ID'
@@ -98,12 +87,64 @@ CREATE TABLE `transaction` (
 	,CONSTRAINT fk_trns_fee FOREIGN KEY (trns_fee_id) REFERENCES trns_fee(trns_fee_id)
 );
 
-
 CREATE TABLE trns_fee (
 	trns_fee_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '수수료 ID',
 	,trns_fee INT NOT NULL COMMENT '수수료',
 	,trns_fee_des VARCHAR(30) NOT NULL COMMENT '설명' COLLATE 'utf8mb4_bin'
 );
+
+CREATE TABLE loan_product(
+	loan_prod_id  BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '대출 상품 ID'
+	,loan_prod_nm VARCHAR(20) NOT NULL COMMENT '상품 이름'
+	,loan_des VARCHAR(255) NOT NULL COMMENT '상품 설명'
+	,loan_max_amt BIGINT NOT NULL COMMENT '대출 한도'
+	,loan_rpmt_tp VARCHAR(5) NOT NULL COMMENT '상환 방식'
+	,loan_term_mo INT NOT NULL COMMENT '최대 대출 기간'
+	,loan_st_dt DATE NOT NULL COMMENT '상품 판매 시작일'
+	,loan_ed_dt DATE NOT NULL COMMENT '상품 판매 종료일'
+	,loan_sts_yn CHAR(1) NOT NULL COMMENT '상품 상태'
+	,loan_prod_crt_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일시'
+	,loan_prod_upd_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 일시'
+);
+
+CREATE TABLE loan_application(
+	loan_app_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '대출 신청 ID'
+	,cust_id BIGINT NOT NULL COMMENT '고객 ID'
+	,loan_prod_id BIGINT NOT NULL COMMENT '대출 상품 ID'
+	,emp_id BIGINT NOT NULL COMMENT '직원 ID'
+	,loan_req_amt BIGINT NOT NULL COMMENT '대출 금액'
+	,loan_req_trm TINYINT NOT NULL COMMENT '대출 기간'
+	,loan_app_dt DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '신청일'
+	,loan_app_sts_cd VARCHAR(5) NOT NULL COMMENT '상태값'
+	,loan_dcsn_dt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '검토 완료 시간'
+	,loan_rjct_rsn VARCHAR(20) COMMENT '거부 사유'
+	,CONSTRAINT fk_loanApp_cust FOREIGN KEY (cust_id) REFERENCES customer(cust_id)
+	,CONSTRAINT fk_loanApp_loanProd FOREIGN KEY (loan_prod_id) REFERENCES loan_product(loan_prod_id)
+	,CONSTRAINT fk_loanApp_emp FOREIGN KEY (emp_id) REFERENCES employees(emp_id)
+);
+
+CREATE TABLE loan(
+	loan_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '대출 ID'
+	,loan_app_id BIGINT NOT NULL COMMENT '대출 신청 ID'
+	,loan_num VARCHAR(20) NOT NULL COMMENT '계좌 번호'
+	,loan_bnk_cd VARCHAR(5) NOT NULL COMMENT '계좌 은행 아이디'
+	,loan_fn_intrst DECIMAL(6,4) NOT NULL COMMENT '실제 이자'
+	,loan_ed_dt DATE NOT NULL COMMENT '대출 종료일'
+	,loan_fn_rpmt_tp VARCHAR(5) NOT NULL COMMENT '최종 상환 방식'
+	,loan_use_acct VARCHAR(20) NOT NULL COMMENT '납부 계좌'
+	,loan_use_bnk_cd VARCHAR(5) NOT NULL COMMENT '납부 은행 아이디'
+	,loan_crt_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일시'
+	,loan_upd_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 일시'
+	,loan_due_sts VARCHAR(10) NOT NULL COMMENT '지불 현황'
+	,CONSTRAINT fk_loan_loanApp FOREIGN KEY (loan_app_id) REFERENCES loan_application(loan_app_id)
+);
+
+
+
+
+
+
+
 
 
 -- 근우님 테이블 사본용
@@ -139,9 +180,6 @@ CREATE TABLE branch (
 	PRIMARY KEY (bran_id) USING BTREE
 )
 
-
-
-
 --                                                           삭제 테이블
 
 DROP TABLE customer;
@@ -160,26 +198,8 @@ DROP TABLE `transaction`;
 
 DROP TABLE trns_fee;
 
+DROP TABLE loan_product;
 
---                                                           수정 테이블
+DROP TABLE loan_application;
 
-ALTER TABLE customer
-MODIFY COLUMN cust_id	BIGINT 	COMMENT '고객 ID';
-
-ALTER TABLE `account`
-MODIFY COLUMN acct_num VARCHAR(20) NOT NULL UNIQUE COMMENT '계좌 번호';
-
-
-
-
-ALTER TABLE business_corporation
-MODIFY COLUMN cust_id	BIGINT 	COMMENT '고객 ID';
-
-
-ALTER TABLE business_corporation
-DROP FOREIGN KEY fk_business_customer;
-
-
-ALTER TABLE business_corporation
-ADD CONSTRAINT fk_business_customer
-FOREIGN KEY (cust_id) REFERENCES customer(cust_id);
+DROP TABLE loan;
