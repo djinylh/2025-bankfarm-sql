@@ -139,6 +139,16 @@ CREATE TABLE loan(
 	,CONSTRAINT fk_loan_loanApp FOREIGN KEY (loan_app_id) REFERENCES loan_application(loan_app_id)
 );
 
+CREATE TABLE loan_repayment(
+	loan_rpmt_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '대출 상환 ID'
+	,loan_id BIGINT NOT NULL COMMENT '대출 ID'
+	,loan_rpmt_prncp BIGINT NOT NULL COMMENT '원금'
+	,loan_rpmt_intrst DECIMAL(6,4) NOT NULL COMMENT '이자'
+	,loan_rpmt_due BIGINT NOT NULL COMMENT '상환금'
+	,loan_due_dt DATE NOT NULL COMMENT '상환일'
+	,loan_due_sts VARCHAR(5) NOT NULL COMMENT '지불 현황'
+	,CONSTRAINT fk_loanReayment_loan FOREIGN KEY (loan_id) REFERENCES loan(loan_id)
+);
 
 
 
@@ -203,3 +213,5 @@ DROP TABLE loan_product;
 DROP TABLE loan_application;
 
 DROP TABLE loan;
+
+DROP TABLE loan_repayment;

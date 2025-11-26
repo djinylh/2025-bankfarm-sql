@@ -54,3 +54,12 @@ VALUE ('RT001','신혼부부',0.2,'혼인 7년 이내 신혼부부 고객');
 
 INSERT INTO rate_rule (rt_tp,rt_rule,rt_pct,rt_des)
 VALUE ('RT001','군인',0.1,'군 복무 중인 고객 우대');
+
+INSERT INTO rate_rule (rt_tp,rt_rule,rt_pct,rt_des)
+VALUE ('RT001','적금/예금 연계',0.05,'일정 금액 이상 적금/예금 보유');
+
+INSERT INTO rate_rule (rt_tp,rt_rule,rt_pct,rt_des)
+VALUE ('RT001','제휴 카드 결제',0.05,'제휴 카드로 월 30만원 이상 결제');
+
+INSERT INTO rate_rule (rt_tp,rt_rule,rt_pct,rt_des)
+VALUE ('RT001','첫 거래',0.05,'신규 거래');
