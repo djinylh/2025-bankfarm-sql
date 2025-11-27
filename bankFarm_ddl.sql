@@ -150,6 +150,29 @@ CREATE TABLE loan_repayment(
 	,CONSTRAINT fk_loanReayment_loan FOREIGN KEY (loan_id) REFERENCES loan(loan_id)
 );
 
+CREATE TABLE loan_overdue(
+	loan_rpmt_id BIGINT NOT NULL COMMENT '대출 상환 ID'
+	,loan_id BIGINT NOT NULL COMMENT '대출 ID'
+	,loan_od_due_sts VARCHAR(10) NOT NULL COMMENT '납부 완료 여부'
+	,loan_od_amt BIGINT NOT NULL COMMENT '연체 금액'
+	,loan_od_start_dt DATE NOT NULL COMMENT '연체 시작일'
+	,loan_od_end_dt DATE COMMENT '최종 납부일'
+	,loan_od_intrst DECIMAL(6,4) NOT NULL COMMENT'연체 이자'
+	,loan_od_fn_amt BIGINT NOT NULL COMMENT '총 납입 금액'
+	,loan_od_month INT NOT NULL COMMENT '연체 월'
+	,CONSTRAINT fk_loanOverdue_loanRepayment FOREIGN KEY (loan_rpmt_id) REFERENCES loan_repayment(loan_rpmt_id)
+	,CONSTRAINT fk_loanOverdue_loan FOREIGN KEY (loan_id) REFERENCES loan(loan_id)
+);
+
+CREATE TABLE overdue_history(
+	od_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '연체 ID'
+	,cust_id BIGINT NOT NULL COMMENT '고객 ID'
+	,od_source_id BIGINT NOT NULL COMMENT '연체 ID'
+	,od_tp ENUM('LOAN','INSURANCE','CARD') NOT NULL COMMENT '상품  타입'
+	,od_st_dt DATE NOT NULL COMMENT '연체 시작일'
+	,od_amt BIGINT NOT NULL COMMENT '연체 금액'
+	,CONSTRAINT fk_overdueHistory_customer FOREIGN KEY (cust_id) REFERENCES customer(cust_id)
+);
 
 
 
@@ -215,3 +238,7 @@ DROP TABLE loan_application;
 DROP TABLE loan;
 
 DROP TABLE loan_repayment;
+
+DROP TABLE loan_overdue;
+
+DROP TABLE overdue_history;
