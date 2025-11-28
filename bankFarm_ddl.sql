@@ -247,3 +247,8 @@ DROP TABLE overdue_history;
 ALTER TABLE prod_rate
 ADD CONSTRAINT uq_prod_combo
 UNIQUE (prod_tp, prod_id, prod_rt_id);
+
+
+ALTER TABLE prod_document
+ADD CONSTRAINT uq_prod_document_combo
+UNIQUE (doc_prod_tp, doc_prod_id);
