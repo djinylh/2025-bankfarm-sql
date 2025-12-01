@@ -35,3 +35,4 @@ SET acct_bal = NEW.trns_bal
 WHERE acct_id = NEW.acct_id;
 
 END $$
+DELIMITER ;
