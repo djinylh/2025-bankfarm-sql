@@ -1,7 +1,5 @@
--- 이것만 예시로 적어두겠음!
-
+/* 																											입출금 트리거 																					*/
 DROP TRIGGER IF EXISTS trg_insert_transaction
-
 DELIMITER $$
 
 CREATE TRIGGER trg_insert_transaction
