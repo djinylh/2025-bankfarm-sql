@@ -252,3 +252,6 @@ UNIQUE (prod_tp, prod_id, prod_rt_id);
 ALTER TABLE prod_document
 ADD CONSTRAINT uq_prod_document_combo
 UNIQUE (doc_prod_tp, doc_prod_id);
+
+ALTER TABLE cust_business_corporation
+MODIFY COLUMN cust_business_yn CHAR(1) DEFAULT 'N';
